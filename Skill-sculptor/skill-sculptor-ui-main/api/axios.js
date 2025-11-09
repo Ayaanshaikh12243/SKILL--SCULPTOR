@@ -1,7 +1,13 @@
 import axios from 'axios';
 
+// Auto-detect environment: use production backend URL or localhost
+const baseURL = import.meta.env.VITE_API_URL || 
+  (window.location.hostname === 'localhost' 
+    ? 'http://localhost:8080/api' 
+    : 'https://skill-sculptor.onrender.com/api');
+
 const API = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL,
 });
 
 API.interceptors.request.use((config) => {
