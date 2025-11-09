@@ -21,7 +21,19 @@ import { errorHandler } from "./middleware/errorHandler.js";
 dotenv.config();
 const app = express();
 
-app.use(cors());
+// CORS configuration - allow frontend URL
+const corsOptions = {
+  origin: [
+    'http://localhost:8081',
+    'http://localhost:8080', 
+    'https://skill-sculptor-2.onrender.com',
+    process.env.FRONTEND_URL
+  ].filter(Boolean),
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(passport.initialize());
 connectDB();
