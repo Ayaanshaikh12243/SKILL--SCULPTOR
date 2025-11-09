@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import API from "../../api/axios";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
@@ -23,14 +23,11 @@ const GamifiedDashboardPage = () => {
 
     const fetchAllData = async () => {
         try {
-            const token = localStorage.getItem("token");
-            const headers = { Authorization: `Bearer ${token}` };
-
             const [progressRes, statsRes, badgesRes, leaderboardRes] = await Promise.all([
-                axios.get("http://localhost:8080/api/gamification/progress", { headers }),
-                axios.get("http://localhost:8080/api/gamification/stats", { headers }),
-                axios.get("http://localhost:8080/api/gamification/badges", { headers }),
-                axios.get("http://localhost:8080/api/gamification/leaderboard", { headers }),
+                API.get("/gamification/progress"),
+                API.get("/gamification/stats"),
+                API.get("/gamification/badges"),
+                API.get("/gamification/leaderboard"),
             ]);
 
             setUserProgress(progressRes.data.userProgress);

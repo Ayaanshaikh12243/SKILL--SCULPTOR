@@ -19,10 +19,7 @@ const QuizListPage = () => {
 
     const fetchQuizzes = async () => {
         try {
-            const token = localStorage.getItem("token");
-            const response = await axios.get("http://localhost:8080/api/quiz", {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+            const response = await API.get("/quiz");
             setQuizzes(response.data.quizzes);
         } catch (error) {
             toast.error("Failed to fetch quizzes");
@@ -33,10 +30,7 @@ const QuizListPage = () => {
 
     const deleteQuiz = async (id: string) => {
         try {
-            const token = localStorage.getItem("token");
-            await axios.delete(`http://localhost:8080/api/quiz/${id}`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+            await API.delete(`/quiz/${id}`);
             toast.success("Quiz deleted");
             setQuizzes(quizzes.filter(q => q._id !== id));
         } catch (error) {

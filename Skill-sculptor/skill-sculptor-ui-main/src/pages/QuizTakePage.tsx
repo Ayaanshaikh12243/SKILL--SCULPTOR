@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import API from "../../api/axios";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -30,10 +30,7 @@ const QuizTakePage = () => {
 
     const fetchQuiz = async () => {
         try {
-            const token = localStorage.getItem("token");
-            const response = await axios.get(`http://localhost:8080/api/quiz/${id}`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+            const response = await API.get(`/quiz/${id}`);
             setQuiz(response.data.quiz);
         } catch (error) {
             toast.error("Failed to fetch quiz");
@@ -64,13 +61,11 @@ const QuizTakePage = () => {
 
     const submitQuiz = async (finalAnswers: any[]) => {
         try {
-            const token = localStorage.getItem("token");
             const totalTimeSpent = (Date.now() - startTime) / 1000;
 
-            const response = await axios.post(
-                `http://localhost:8080/api/quiz/${id}/attempt`,
-                { answers: finalAnswers, timeSpent: totalTimeSpent },
-                { headers: { Authorization: `Bearer ${token}` } }
+            const response = await API.post(
+                `/quiz/${id}/attempt`,
+                { answers: finalAnswers, timeSpent: totalTimeSpent }
             );
 
             setResults(response.data);
