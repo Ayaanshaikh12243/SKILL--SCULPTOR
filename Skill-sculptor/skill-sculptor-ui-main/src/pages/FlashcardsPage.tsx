@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import API from "../../api/axios";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
@@ -21,10 +21,7 @@ const FlashcardsPage = () => {
 
     const fetchFlashcards = async () => {
         try {
-            const token = localStorage.getItem("token");
-            const response = await axios.get("http://localhost:8080/api/flashcard", {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+            const response = await API.get("/flashcard");
             setFlashcards(response.data.flashcards);
         } catch (error) {
             toast.error("Failed to fetch flashcards");
@@ -37,11 +34,9 @@ const FlashcardsPage = () => {
         if (flashcards.length === 0) return;
 
         try {
-            const token = localStorage.getItem("token");
-            await axios.put(
-                `http://localhost:8080/api/flashcard/${flashcards[currentIndex]._id}/review`,
-                { correct },
-                { headers: { Authorization: `Bearer ${token}` } }
+            await API.put(
+                `/flashcard/${flashcards[currentIndex]._id}/review`,
+                { correct }
             );
 
             toast.success(correct ? "+3 XP for correct answer!" : "+1 XP for trying!");
@@ -65,10 +60,8 @@ const FlashcardsPage = () => {
         if (flashcards.length === 0) return;
 
         try {
-            const token = localStorage.getItem("token");
-            await axios.delete(
-                `http://localhost:8080/api/flashcard/${flashcards[currentIndex]._id}`,
-                { headers: { Authorization: `Bearer ${token}` } }
+            await API.delete(
+                `/flashcard/${flashcards[currentIndex]._id}`
             );
 
             toast.success("Flashcard deleted");

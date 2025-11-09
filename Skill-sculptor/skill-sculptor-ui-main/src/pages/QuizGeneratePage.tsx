@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
+import API from "../../api/axios";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -38,13 +38,9 @@ const QuizGeneratePage = () => {
 
         setGenerating(true);
         try {
-            const token = localStorage.getItem("token");
-            const response = await axios.post(
-                "http://localhost:8080/api/quiz/generate",
-                { text, count: count[0], difficulty },
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                }
+            const response = await API.post(
+                "/quiz/generate",
+                { text, count: count[0], difficulty }
             );
 
             setQuestions(response.data.questions);
@@ -65,13 +61,9 @@ const QuizGeneratePage = () => {
 
         setSaving(true);
         try {
-            const token = localStorage.getItem("token");
-            const response = await axios.post(
-                "http://localhost:8080/api/quiz",
-                { title, description, questions, sourceText: text },
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                }
+            const response = await API.post(
+                "/quiz",
+                { title, description, questions, sourceText: text }
             );
 
             toast.success("Quiz saved successfully! +20 XP");

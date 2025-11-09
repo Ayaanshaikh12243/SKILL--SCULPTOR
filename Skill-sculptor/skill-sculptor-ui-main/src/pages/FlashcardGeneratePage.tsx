@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
+import API from "../../api/axios";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -36,13 +36,9 @@ const FlashcardGeneratePage = () => {
 
         setGenerating(true);
         try {
-            const token = localStorage.getItem("token");
-            const response = await axios.post(
-                "http://localhost:8080/api/flashcard/generate",
-                { text, count: count[0], difficulty },
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                }
+            const response = await API.post(
+                "/flashcard/generate",
+                { text, count: count[0], difficulty }
             );
 
             setFlashcards(response.data.flashcards);
@@ -58,13 +54,9 @@ const FlashcardGeneratePage = () => {
     const saveFlashcards = async () => {
         setSaving(true);
         try {
-            const token = localStorage.getItem("token");
-            const response = await axios.post(
-                "http://localhost:8080/api/flashcard",
-                { flashcards },
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                }
+            const response = await API.post(
+                "/flashcard",
+                { flashcards }
             );
 
             toast.success("Flashcards saved successfully! +5 XP per card");
